@@ -6,9 +6,9 @@
     class plugins {
 
         /**
-         * 取得資料庫物件
+         * 連接到資料庫
          *
-         * @return void
+         * @return Object
          */
         private function conn(){
             $r = new conn();
@@ -18,8 +18,8 @@
         /**
          * 取得有格式的時間字串
          *
-         * @param string $format
-         * @return void
+         * @param String $format
+         * @return String
          */
         public function timestamp($format = 'Y-m-d H:i:s'){
             return date($format);
