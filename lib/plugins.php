@@ -32,15 +32,15 @@
         * {service_name} => 'get', 'list', 'run'
         * {SQL}          => 資料庫指令
         *
-        * @param  Array $object
+        * @param  Array $array
         * @return Array
         */
-        public function squery($object){
+        public function squery($array){
             $conn = $this->conn();
-            switch($object[0]){
+            switch($array[0]){
                 case 'get':
-                    $result = $conn->query($object[1]);
-                    if(@$object[2]){
+                    $result = $conn->query($array[1]);
+                    if(@$array[2]){
                         $row = mysqli_fetch_assoc($result);
                     }else{
                         $row = mysqli_fetch_array($result);
@@ -51,8 +51,8 @@
                 case 'list':
                     $x = 1;
                     $obj = [];
-                    $result = $conn->query($object[1]);
-                    if(@$object[2]){
+                    $result = $conn->query($array[1]);
+                    if(@$array[2]){
                         while($row = mysqli_fetch_assoc($result)){
                             $obj[$x]=$row;
                             $x++;
@@ -67,7 +67,7 @@
                     return $obj;
                 break;
                 case 'run':
-                    $conn->query($object[1]);
+                    $conn->query($array[1]);
                     if($conn->error){
                         echo $conn->error;
                         $conn->close();
@@ -99,8 +99,8 @@
          * output:
          * /0:1/2:3:4
          *
-         * @param  String $array
-         * @return Array
+         * @param Array $array
+         * @return String
          */
         public function array_decode($array){
             $string = "";
@@ -223,7 +223,7 @@
         }
         
         /**
-         * 快速找尋資料格
+         * 快速找尋資料欄位
          * 
          * $array
          * [0] => 資料表名稱
@@ -231,7 +231,7 @@
          * [2] => 數值
          *
          * @param Array $array
-         * @return Boolean
+         * @return Array
          */
         public function findsql($array){
             $sql = "SELECT * FROM `$array[0]` WHERE `$array[1]` = '$array[2]'";
@@ -278,7 +278,7 @@
          * 是否為會員
          *
          * @param Array $array
-         * @return boolean
+         * @return Boolean
          */
         public function isMember($array){
             $row = squery([
@@ -314,9 +314,9 @@
         /**
          * 取 $quantity 個 亂數且不重複
          *
-         * @param integer $min
-         * @param integer $max
-         * @param integer $quantity
+         * @param Integer $min
+         * @param Integer $max
+         * @param Integer $quantity
          * @return Array
          */
         public function random_not_repeat($min=1, $max=100, $quantity=5) {
@@ -402,7 +402,7 @@
          *
          * @param String $prefix
          * @param String $string
-         * @return array
+         * @return Array
          */
         public function exp($prefix,$string){
             return explode($prefix, $string);
