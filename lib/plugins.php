@@ -325,15 +325,98 @@
             return array_slice($numbers, 0, $quantity);
         }
 
-        public function post($a){return $_POST[$a];}
-        public function request($a){return $_REQUEST[$a];}
-        public function get($a){return $_GET[$a];}
-        public function session($a){return $_SESSION[$a];}
-        public function set_session($a){$_SESSION[$a[0]] = $a[1];}
-        public function files($a){return $_FILES[$a];}
-        public function v($a){var_dump($a);}
-        public function e($a){return explode(':',$a);}
-        public function md5($v){return md5($v);}
+        /**
+         * POST 方法
+         *
+         * @param String $string
+         * @return Mixed
+         */
+        public function post($string){
+            return $_POST[$string];
+        }
+
+        /**
+         * REQUEST 方法
+         *
+         * @param String $string
+         * @return Mixed
+         */
+        public function request($string){
+            return $_REQUEST[$string];
+        }
+
+        /**
+         * GET 方法
+         *
+         * @param String $string
+         * @return Mixed
+         */
+        public function get($string){
+            return $_GET[$string];
+        }
+
+        /**
+         * SESSION 方法
+         *
+         * @param String $string
+         * @return Mixed
+         */
+        public function session($string){
+            return $_SESSION[$string];
+        }
+
+        /**
+         * FILES 方法
+         *
+         * @param String $string
+         * @return Mixed
+         */
+        public function files($string){
+            return $_FILES[$string];
+        }
+
+        /**
+         * 設定 SESSION 方法
+         *
+         * @param Array $array
+         * @return Boolean
+         */
+        public function set_session($array){
+            $_SESSION[$array[0]] = $array[1];
+            return true;
+        }
+
+        /**
+         * 檢視導向之物件狀態
+         *
+         * @param Mixed $mixed
+         * @return Boolean
+         */
+        public function v($mixed){
+            var_dump($mixed);
+            return true;
+        }
+
+        /**
+         * 字串特徵分解
+         *
+         * @param String $prefix
+         * @param String $string
+         * @return array
+         */
+        public function exp($prefix,$string){
+            return explode($prefix, $string);
+        }
+
+        /**
+         * md5 訊息摘要演算法
+         *
+         * @param String $string
+         * @return String
+         */
+        public function m($string){
+            return md5($string);
+        }
 
     }
     
