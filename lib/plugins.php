@@ -1,4 +1,5 @@
 <?php
+    session_start();
     require_once "conn.php";
     
 
@@ -269,29 +270,70 @@
          * @param String $path
          * @return String
          */
-        function website_path($path){
+        public function website_path($path){
             return '//'.$_SERVER['HTTP_HOST'].'/'.$path;
         }
 
         /**
          * 是否為會員
          *
-         * @param Object $object
+         * @param Array $array
          * @return boolean
          */
-        function isMember($object){
+        public function isMember($array){
             $row = squery([
                 'get',
-                "SELECT * FROM `member` WHERE `access_token` = '$object[1]' AND `enable` = 'true'"
+                "SELECT * FROM `member` WHERE `access_token` = '$array[1]' AND `enable` = 'true'"
             ]);
-            if($row[1]===$object[1] && $row[1]!=""){
+            if($row[1]===$array[1] && $row[1]!=""){
                 return true;
             }else{
                 return false;
             }
         }
 
-        
+        /**
+         * 會員驗證
+         *
+         * @param Array $array
+         * @return Boolean
+         */
+        public function Auth($array){
+            $row = squery([
+                'get',
+                "SELECT * FROM `member` WHERE `username` = '$array[0]' AND `password` ='$array[1]'"
+            ]);
+            if($array[0] === $row[3] && $array[1] === $row[4] && $row[3] != "" && $row[4] != "" && $array[0] != "" && $array[1] != ""){
+                set_s(['member',$row]);
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        /**
+         * 取 $quantity 個 亂數且不重複
+         *
+         * @param integer $min
+         * @param integer $max
+         * @param integer $quantity
+         * @return Array
+         */
+        public function random_not_repeat($min=1, $max=100, $quantity=5) {
+            $numbers = range($min, $max);
+            shuffle($numbers);
+            return array_slice($numbers, 0, $quantity);
+        }
+
+        public function post($a){return $_POST[$a];}
+        public function request($a){return $_REQUEST[$a];}
+        public function get($a){return $_GET[$a];}
+        public function session($a){return $_SESSION[$a];}
+        public function set_session($a){$_SESSION[$a[0]] = $a[1];}
+        public function files($a){return $_FILES[$a];}
+        public function v($a){var_dump($a);}
+        public function e($a){return explode(':',$a);}
+        public function md5($v){return md5($v);}
 
     }
     
