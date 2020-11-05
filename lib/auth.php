@@ -1,8 +1,20 @@
 <?php 
 
     require_once "exception.php";
+    require_once "plugins.php";
 
     class auth extends Exception_try {
+
+        private $plugins;
+
+        /**
+         * Init Module Loader
+         * @return Boolean
+         */
+        public function __construct() {
+            $this->plugins = new plugins();
+            return true;
+        }
 
         /**
          * 連接到資料庫
@@ -12,7 +24,21 @@
         private function conn(){
             $r = new conn();
             return $r->connect();
-        }        
+        }
+        
+        /**
+         * 執行資料庫指令
+         * 
+         * squery( [ '{service_name}', "{SQL}" ] );
+         * {service_name} => 'get', 'list', 'run'
+         * {SQL}          => 資料庫指令
+         *
+         * @param  Array $array
+         * @return Array
+         */
+        public function squery($array){
+            return $this->plugins->squery($array);
+        }
 
         /**
          * 是否為會員
