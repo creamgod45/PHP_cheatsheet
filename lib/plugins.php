@@ -1,9 +1,12 @@
 <?php
-    session_start();
-    require_once "conn.php";
-    
 
-    class plugins {
+    require_once "exception.php";
+    
+    /**
+     * Plugins module
+     * @package lib
+     */
+    class plugins extends Exception_try {
 
         /**
          * 連接到資料庫
@@ -272,43 +275,6 @@
          */
         public function website_path($path){
             return '//'.$_SERVER['HTTP_HOST'].'/'.$path;
-        }
-
-        /**
-         * 是否為會員
-         *
-         * @param Array $array
-         * @return Boolean
-         */
-        public function isMember($array){
-            $row = squery([
-                'get',
-                "SELECT * FROM `member` WHERE `access_token` = '$array[1]' AND `enable` = 'true'"
-            ]);
-            if($row[1]===$array[1] && $row[1]!=""){
-                return true;
-            }else{
-                return false;
-            }
-        }
-
-        /**
-         * 會員驗證
-         *
-         * @param Array $array
-         * @return Boolean
-         */
-        public function Auth($array){
-            $row = squery([
-                'get',
-                "SELECT * FROM `member` WHERE `username` = '$array[0]' AND `password` ='$array[1]'"
-            ]);
-            if($array[0] === $row[3] && $array[1] === $row[4] && $row[3] != "" && $row[4] != "" && $array[0] != "" && $array[1] != ""){
-                set_s(['member',$row]);
-                return true;
-            }else{
-                return false;
-            }
         }
 
         /**

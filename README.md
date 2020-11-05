@@ -1,7 +1,9 @@
 # PHP_cheatsheet
 
 ## CLASS 
-
+- auth
+    - ```isMember(Array $array) : Boolean``` [是否為會員]
+    - ```Auth(Array $array) : Boolean``` [會員驗證]
 - plugins
     - ```conn() : Object``` [連接到資料庫]
     - ```timestamp(String $format) : String``` [取得有格式的時間字串]
@@ -16,8 +18,6 @@
     - ```router(Integer $layer) : String``` [網站路由]
     - ```resources(String $path) : String``` [網站財產資源索引]
     - ```website_path(String $path) : String``` [網站資源索引]
-    - ```isMember(Array $array) : Boolean``` [是否為會員]
-    - ```Auth(Array $array) : Boolean``` [會員驗證]
     - ```random_not_repeat(Integer $min, Integer $max, Integer $quantity) : Array``` [取 $quantity 個 亂數且不重複]
     - ```post(String $string) : Mixed``` [POST 方法]
     - ```request(String $string) : Mixed``` [REQUEST 方法]
@@ -30,3 +30,24 @@
     - ```m(String $string) : String``` [md5 訊息摘要演算法]
 - conn
     - ```connect() : Object``` [連接到資料庫]
+
+## UPDATE LOG
+- 1.1.0 
+    - [UPDATE]lib/plugins.php
+    - [UPDATE]README.md
+- 1.0.2
+    - [UPDATE]index.php
+    - [UPDATE]README.md
+    - [UPDATE]lib/conn.php
+    - [UPDATE]lib/plugins.php
+    - [REMOVE]test.php
+- 1.0.1
+    - [UPDATE]index.php
+    - [UPDATE]lib/plugins.php
+    - [UPDATE]test.php
+- 1.0.0
+    - [ADDED]index.php
+    - [ADDED]test.php
+    - [ADDED]lib/conn.php
+    - [ADDED]lib/plugins.php
+    - [ADDED]lib/plugins.php

@@ -1,9 +1,12 @@
 <?php 
+
+    require_once "exception.php";
+    
     /**
      * connect database
-     * @return Array
+     * @package lib
      */
-    class conn {
+    class conn extends Exception_try {
 
         /**
          * 連接到資料庫
