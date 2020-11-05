@@ -4,7 +4,8 @@
     }else{
         if(@$plugins->post("login")){
             $r = $auth->Login([$plugins->post('username'), $plugins->post('password')]);
-            $plugins->v($plugins->session("member"));
+            $plugins->v($r);
+            //$plugins->v($plugins->session("member"));
         }else{
             echo '
 
