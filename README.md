@@ -2,6 +2,7 @@
 
 ## CLASS 
 - auth
+    - ```new plugins() : class``` [plugins class]
     - ```isMember(Array $array) : Boolean``` [是否為會員]
     - ```Login(Array $array) : Boolean``` [會員驗證]
 - plugins
