@@ -3,7 +3,7 @@
 ## CLASS 
 - auth
     - ```isMember(Array $array) : Boolean``` [是否為會員]
-    - ```Auth(Array $array) : Boolean``` [會員驗證]
+    - ```Login(Array $array) : Boolean``` [會員驗證]
 - plugins
     - ```conn() : Object``` [連接到資料庫]
     - ```timestamp(String $format) : String``` [取得有格式的時間字串]
