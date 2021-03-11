@@ -1,22 +1,15 @@
 <?php
 
     require_once "exception.php";
+    require 'vendor/autoload.php';
     
     /**
      * Plugins module
      * @package lib
      */
     class plugins extends Exception_try {
-
-        /**
-         * 連接到資料庫
-         *
-         * @return Object
-         */
-        private function conn(){
-            $r = new conn();
-            return $r->connect();
-        }
+        
+        use Nette\SmartObject;
 
         /**
          * 取得有格式的時間字串
@@ -24,8 +17,8 @@
          * @param String $format
          * @return String
          */
-        public function timestamp($format = 'Y-m-d H:i:s'){
-            return date($format);
+        public function timestamp(String $format = 'Y-m-d H:i:s', $time = null){
+            return date($format, $time);
         }
 
         /**
@@ -38,7 +31,7 @@
         * @param  Array $array
         * @return Array
         */
-        public function squery($array){
+        public function squery(Array $array){
             $conn = $this->conn();
             switch($array[0]){
                 case 'get':
@@ -105,7 +98,7 @@
          * @param Array $array
          * @return String
          */
-        public function array_decode($array){
+        public function array_decode(Array $array){
             $string = "";
             for($i=0;$i<=count($array)-1;$i++){
                 if($i===0){
@@ -152,7 +145,7 @@
          * @param  String $string
          * @return Array
          */
-        public function array_encode($string){
+        public function array_encode(String $string){
             $array = [];
             $b = explode('/', $string);
             for($i=0;$i<=count($b)-1;$i++){
@@ -173,7 +166,7 @@
          * @param String $string
          * @return Boolean
          */
-        public function html_alert_text($string){
+        public function html_alert_text(String $string){
             echo "<h1>$string</h1>";
             return true;
         }
@@ -184,7 +177,7 @@
          * @param String $string
          * @return String
          */
-        public function html_alert_texts($string){
+        public function html_alert_texts(String $string){
             return "<h1>$string</h1>";
         }
 
@@ -196,7 +189,7 @@
          * @param Array $array
          * @return Boolean
          */
-        public function goto_page($array){
+        public function goto_page(Array $array){
             header('refresh:'.$array[0].';url="'.$array[1].'"');
             return true;
         }
@@ -214,7 +207,7 @@
          * @param Array $array
          * @return Boolean
          */
-        public function result($boolean, $array){
+        public function result(Bool $boolean, Array $array){
             if($boolean){
                 echo "<h1>$array[0]</h1>";
                 header('refresh:'.$array[2].';url="'.$array[3].'"');
@@ -236,7 +229,7 @@
          * @param Array $array
          * @return Array
          */
-        public function findsql($array){
+        public function findsql(Array $array){
             $sql = "SELECT * FROM `$array[0]` WHERE `$array[1]` = '$array[2]'";
             return squery([
                 'get',
@@ -250,7 +243,7 @@
          * @param Integer $layer
          * @return String
          */
-        public function router($layer=1){
+        public function router(Int $layer=1){
             $url = $_SERVER['REQUEST_URI'];
             $REQUEST = explode("/", $url);
             $REQUEST = $REQUEST[$layer];
@@ -263,7 +256,7 @@
          * @param String $path
          * @return String
          */
-        public function resources($path){
+        public function resources(String $path){
             return '//'.$_SERVER['HTTP_HOST'].'/assets/'.$path;
         }
 
@@ -273,7 +266,7 @@
          * @param String $path
          * @return String
          */
-        public function website_path($path){
+        public function website_path(String $path){
             return '//'.$_SERVER['HTTP_HOST'].'/'.$path;
         }
 
@@ -285,10 +278,121 @@
          * @param Integer $quantity
          * @return Array
          */
-        public function random_not_repeat($min=1, $max=100, $quantity=5) {
+        public function random_not_repeat(Int $min=1, Int $max=100, Int $quantity=5) {
             $numbers = range($min, $max);
             shuffle($numbers);
             return array_slice($numbers, 0, $quantity);
+        }
+
+        /**
+         * 取得隨機亂碼
+         *
+         * @param integer $length
+         * @return void
+         */
+        public function Get_eng_randoom($length = 10){
+            $str = "";
+            $characters = array_merge(range('A','Z'), range('a','z'), range('0','9'));
+            $max = count($characters) - 1;
+            for ($i = 0; $i < $length; $i++) {
+                $rand = rand(0, $max);
+                $str .= $characters[$rand];
+            }
+            return $str;
+        }
+
+        /**
+         * IP 位置
+         *
+         * @return void
+         */
+        public function GetIP(){
+            if(!empty($_SERVER["HTTP_CLIENT_IP"])){
+             $cip = $_SERVER["HTTP_CLIENT_IP"];
+            }elseif(!empty($_SERVER["HTTP_X_FORWARDED_FOR"])){
+             $cip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+            }elseif(!empty($_SERVER["REMOTE_ADDR"])){
+             $cip = $_SERVER["REMOTE_ADDR"];
+            }else{
+             $cip = "無法取得IP位址！";
+            }
+            if($cip === "::1"){
+                $cip = '127.0.0.1';
+            }
+            return $cip;
+        }
+        
+        /**
+         * 取得裝置
+         *
+         * @return void
+         */
+        public function GetDevice(){
+            $iPod = stripos($_SERVER['HTTP_USER_AGENT'],"iPod");
+            $iPhone = stripos($_SERVER['HTTP_USER_AGENT'],"iPhone");
+            $iPad = stripos($_SERVER['HTTP_USER_AGENT'],"iPad");
+            if(stripos($_SERVER['HTTP_USER_AGENT'],"Android") && stripos($_SERVER['HTTP_USER_AGENT'],"mobile")){
+                    $Android = true;
+            }else if(stripos($_SERVER['HTTP_USER_AGENT'],"Android")){
+                    $Android = false;
+                    $AndroidTablet = true;
+            }else{
+                    $Android = false;
+                    $AndroidTablet = false;
+            }
+            $webOS = stripos($_SERVER['HTTP_USER_AGENT'],"webOS");
+            $BlackBerry = stripos($_SERVER['HTTP_USER_AGENT'],"BlackBerry");
+            $RimTablet= stripos($_SERVER['HTTP_USER_AGENT'],"RIM Tablet");
+        
+            if( $iPod || $iPhone ){
+                return 'iPhone';
+            }else if($iPad){
+                return 'iPad';
+            }else if($Android){
+                return 'Android';
+            }else if($AndroidTablet){
+                return 'AndroidTablet';
+            }else if($webOS){
+                return 'webOS';
+            }else if($BlackBerry){
+                return 'BlackBerry';
+            }else if($RimTablet){
+                return 'RimTablet';
+            }else{
+                $user_agent = $_SERVER['HTTP_USER_AGENT'];
+                $os_platform  = "Unknown OS Platform";
+                $os_array     = array(
+                                      '/windows nt 10/i'      =>  'Windows 10',
+                                      '/windows nt 6.3/i'     =>  'Windows 8.1',
+                                      '/windows nt 6.2/i'     =>  'Windows 8',
+                                      '/windows nt 6.1/i'     =>  'Windows 7',
+                                      '/windows nt 6.0/i'     =>  'Windows Vista',
+                                      '/windows nt 5.2/i'     =>  'Windows Server 2003/XP x64',
+                                      '/windows nt 5.1/i'     =>  'Windows XP',
+                                      '/windows xp/i'         =>  'Windows XP',
+                                      '/windows nt 5.0/i'     =>  'Windows 2000',
+                                      '/windows me/i'         =>  'Windows ME',
+                                      '/win98/i'              =>  'Windows 98',
+                                      '/win95/i'              =>  'Windows 95',
+                                      '/win16/i'              =>  'Windows 3.11',
+                                      '/macintosh|mac os x/i' =>  'Mac OS X',
+                                      '/mac_powerpc/i'        =>  'Mac OS 9',
+                                      '/linux/i'              =>  'Linux',
+                                      '/ubuntu/i'             =>  'Ubuntu',
+                                      '/iphone/i'             =>  'iPhone',
+                                      '/ipod/i'               =>  'iPod',
+                                      '/ipad/i'               =>  'iPad',
+                                      '/android/i'            =>  'Android',
+                                      '/blackberry/i'         =>  'BlackBerry',
+                                      '/webos/i'              =>  'Mobile'
+                                );
+        
+                foreach ($os_array as $regex => $value)
+                    if (preg_match($regex, $user_agent))
+                        $os_platform = $value;
+        
+                return $os_platform;
+            }
         }
 
         /**
@@ -297,7 +401,8 @@
          * @param String $string
          * @return Mixed
          */
-        public function post($string){
+        public function post(String $string=""){
+            if(@$string==="") return $_POST;
             return $_POST[$string];
         }
 
@@ -307,7 +412,8 @@
          * @param String $string
          * @return Mixed
          */
-        public function request($string){
+        public function request(String $string=""){
+            if(@$string==="") return $_REQUEST;
             return $_REQUEST[$string];
         }
 
@@ -317,7 +423,8 @@
          * @param String $string
          * @return Mixed
          */
-        public function get($string){
+        public function get(String $string=""){
+            if(@$string==="") return $_GET;
             return $_GET[$string];
         }
 
@@ -327,7 +434,8 @@
          * @param String $string
          * @return Mixed
          */
-        public function session($string){
+        public function session(String $string=""){
+            if(@$string==="") return $_SESSION;
             return $_SESSION[$string];
         }
 
@@ -337,7 +445,8 @@
          * @param String $string
          * @return Mixed
          */
-        public function files($string){
+        public function files(String $string=""){
+            if(@$string==="") return $_FILES;
             return $_FILES[$string];
         }
 
@@ -347,8 +456,19 @@
          * @param Array $array
          * @return Boolean
          */
-        public function set_session($array){
+        public function set_session(Array $array){
             $_SESSION[$array[0]] = $array[1];
+            return true;
+        }
+
+        /**
+         * 設定 SESSION 方法
+         *
+         * @param Array $array
+         * @return Boolean
+         */
+        public function set_cookie(Array $array=[null,null,0]){
+            setcookie( $array[0], $array[1], $array[2]);
             return true;
         }
 
@@ -359,7 +479,18 @@
          * @return Boolean
          */
         public function v($mixed){
-            var_dump($mixed);
+            dump($mixed);
+            return true;
+        }
+
+        /**
+         * 釘選物件
+         *
+         * @param Mixed $mixed
+         * @return Boolean
+         */
+        public function pinv($mixed,$string = "Default"){
+            bdump($mixed,$string);
             return true;
         }
 
@@ -370,7 +501,7 @@
          * @param String $string
          * @return Array
          */
-        public function exp($prefix,$string){
+        public function exp(String $prefix, String $string){
             return explode($prefix, $string);
         }
 
@@ -380,8 +511,66 @@
          * @param String $string
          * @return String
          */
-        public function m($string){
+        public function m(String $string){
             return md5($string);
+        }
+
+
+        /**
+         * Array 指標數值化排序
+         *
+         * @param Array $array
+         * @param Int $offset
+         * @return void
+         */
+        public function array_resort(Array $array, Int $offset=-1){
+            $arr=[];$k=0;
+            foreach ($array as $key => $value) {
+                if($offset == (-1)){
+                    $arr[$k]=$value;
+                    $k++;
+                }else{
+                    if($k <= count($array)-$offset-1){
+                        $arr[$k]=$value;
+                        $k++;
+                    }
+                }
+            }
+            return $arr;
+        }
+
+        /**
+         * Array 由指標群組抽取特定指標
+         * 
+         * *nametokey
+         *  true:(JSON){"0":"1","1":"2","2":"3"}
+         *  false:(JSON){"test1":"1","test2":"2","test3":"3"}
+         * 
+         * *result
+         *  true:(PHP)return array()
+         *  false:(PHP)return boolean(true)
+         *
+         * @param Array $array
+         * @param Array $keyrows
+         * @param boolean $nametokey
+         * @return void
+         */
+        public function array_splice_key(Array &$array, Array $keyrows=null, bool $nametokey=false, bool $result=false){
+            $arr=[];
+            $tmp;
+            foreach ($array as $key => $value) {
+                if($keyrows!=null){
+                    if($nametokey===true){
+                        $array_int = $this->array_resort($array);
+                    }else{
+                        for ($i=0; $i <= count($keyrows)-1; $i++) { 
+                            if($key === $keyrows[$i]){
+                                unset($array[$key]);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
     }

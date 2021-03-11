@@ -2,10 +2,15 @@
 
     require_once "exception.php";
     require_once "plugins.php";
+    require_once "keys.php";
 
     class auth extends Exception_try {
 
+        use Nette\SmartObject;
+
         private $plugins;
+
+        private $keys;
 
         /**
          * Init Module Loader
@@ -13,17 +18,8 @@
          */
         public function __construct() {
             $this->plugins = new plugins();
+            $this->keys = new keys();
             return true;
-        }
-
-        /**
-         * 連接到資料庫
-         *
-         * @return Object
-         */
-        private function conn(){
-            $r = new conn();
-            return $r->connect();
         }
 
         /**
@@ -33,11 +29,12 @@
          * @return Boolean
          */
         public function isMember($array){
+            $access_token = $array["access_token"];
             $row = $this->plugins->squery([
                 'get',
-                "SELECT * FROM `member` WHERE `access_token` = '$array[1]' AND `enable` = 'true'"
+                "SELECT `access_token` FROM `member` WHERE `access_token` = '$access_token' AND `enable` = 'true'"
             ]);
-            if($row[1]===$array[1] && $row[1]!=""){
+            if($row["access_token"] === $access_token && $row["access_token"] != ""){
                 return true;
             }else{
                 return false;
@@ -45,7 +42,7 @@
         }
 
         /**
-         * 會員驗證
+         * 會員登入
          *
          * @param Array $array
          * @return Boolean
@@ -53,14 +50,50 @@
         public function Login($array){
             $row = $this->plugins->squery([
                 'get',
-                "SELECT * FROM `member` WHERE `username` = '$array[0]' AND `password` ='$array[1]'"
+                "SELECT `password` FROM `member` WHERE `username` = '$array[0]' AND `enable` = 'true'"
             ]);
-            if($array[0] === $row[2] && $array[1] === $row[3] && $row[2] != "" && $row[3] != "" && $array[0] != "" && $array[1] != ""){
-                $this->plugins->set_session(['member',$row]);
-                return true;
-            }else{
-                return false;
+            if(is_array($row) && !empty($row)){
+                $passwd = $this->keys->passwd_decode($array[1],$row[0]);
+                if($passwd){
+                    $row = $this->plugins->squery([
+                        'get',
+                        "SELECT `access_token`, `username`, `email`, `admin`, `enable`, `created_time`, `updated_time` FROM `member` WHERE `username` = '$array[0]'"
+                    ]);
+                    $this->plugins->set_session(['member',$row]);
+                    return true;
+                }
+                return 1;
             }
+            return 0;
+        }
+
+        /**
+         * 會員註冊
+         * $array => `access_token`, `username`, `password`, `email`, `admin`, `enable`, `created_time`
+         * 
+         * @param Array $array
+         * @return Integer
+         */
+        public function Register($array){
+            if($array[1] === $array[2]){
+                $row = $this->plugins->squery([
+                    'get',
+                    "SELECT `username` FROM `member` WHERE `username` = '$array[0]'"
+                ]);
+                if(empty($row)){
+                    $passwd = $this->keys->passwd_encode($array[1]);
+                    $key = $this->keys->uid();
+                    $time = $this->plugins->timestamp();
+                    $row = $this->plugins->squery([
+                        'run',
+                        "INSERT INTO `member`(`access_token`, `username`, `password`, `email`, `admin`, `enable`, `created_time`) 
+                        VALUES ('$key','$array[0]','$passwd','$array[3]','$array[4]','$array[5]','$time')"
+                    ]);
+                    return true;
+                }
+                return 1;
+            }
+            return 0;
         }
 
         public function test(){

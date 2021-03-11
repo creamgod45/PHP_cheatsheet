@@ -1,0 +1,11 @@
+{
+    "require": {
+        "nullpunkt/lz-string-php": "^1.2",
+        "phpmailer/phpmailer": "^6.2",
+        "nette/utils": "^3.2",
+        "nette/robot-loader": "^3.3",
+        "nette/php-generator": "^3.5",
+        "tracy/tracy": "^2.8",
+        "sonata-project/google-authenticator": "^2.3"
+    }
+}

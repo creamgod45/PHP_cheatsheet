@@ -8,6 +8,8 @@
      */
     class conn extends Exception_try {
 
+        use Nette\SmartObject;
+
         /**
          * 連接到資料庫
          *
