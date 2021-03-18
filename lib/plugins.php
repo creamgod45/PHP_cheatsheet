@@ -540,6 +540,58 @@
         }
 
         /**
+         * Array 陣列指標名稱轉換為數字化指標名稱
+         *
+         * @param Array $array
+         * @param Boolean $value
+         * @param String $prefix
+         * @return void
+         */
+        public function array_keytovalue(Array $array, bool $value=false,String $prefix=":"){
+            $arr=[];
+            $k=0;
+            if(is_array($array)){
+                foreach ($array as $key => $value) {
+                    if($value === true){
+                        $arr[$k]=$key.$prefix.$value;
+                    }else{
+                        $arr[$k]=$key;
+                    }
+                    $k++;
+                }
+                return $arr;
+            }
+            return false;
+        }
+
+        /**
+         * Array 搜尋數值差別
+         *
+         * @param Array $arr1
+         * @param Array $arr2
+         * @param boolean $result
+         * @param boolean $notfoundmsg
+         * @return void
+         */
+        public function array_diffs(Array $arr1, Array $arr2, bool $result=false, bool $notfoundmsg=false){
+            $arr=[];$e=0;
+            foreach ($arr1 as $key => $value) {
+                if(!empty($arr2[$key])){
+                    if(@$arr1[$key]!=$arr2[$key]){$r = true;}else{$r=false;}
+                    array_push($arr,$r);
+                }else{
+                    $e++;
+                }
+                if($notfoundmsg===true) echo $key." 未找相關指標名稱。<br>";
+            }
+            if($e>0) return false;
+            if($result===true){
+                return $arr;
+            }
+            return true;
+        }
+
+        /**
          * Array 由指標群組抽取特定指標
          * 
          * *nametokey
@@ -555,21 +607,39 @@
          * @param boolean $nametokey
          * @return void
          */
-        public function array_splice_key(Array &$array, Array $keyrows=null, bool $nametokey=false, bool $result=false){
-            $arr=[];
-            $tmp;
-            foreach ($array as $key => $value) {
-                if($keyrows!=null){
-                    if($nametokey===true){
-                        $array_int = $this->array_resort($array);
-                    }else{
-                        for ($i=0; $i <= count($keyrows)-1; $i++) { 
+        public function array_splice_key(Array &$array, Array $keyrows=null, bool $nametokey=false, bool $result=false, bool $keyint=false){
+            $arr=[];$tmp;       
+            if($keyrows!=null and is_array($keyrows)){
+                if($nametokey===true){
+                    $int_arr = $this->array_keytovalue($array);     
+                    foreach ($keyrows as $k => $v) {
+                        if($result===true){
+                            array_push($arr,$array[$int_arr[$v]]);
+                        }
+                        unset($array[$int_arr[$v]]);
+                    }
+                }else{
+                    foreach ($array as $key => $value) {
+                        for ($i=0; $i <= count($keyrows)-1; $i++) {
                             if($key === $keyrows[$i]){
+                                if($result===true){
+                                    array_push($arr, $array[$key]);
+                                }
                                 unset($array[$key]);
                             }
                         }
                     }
                 }
+                if($keyint === true){
+                    $array=$this->array_resort($array);
+                }
+                if($result===true){
+                    return $arr;
+                }
+                return true;
+            }else{
+                
+                return false;
             }
         }
 

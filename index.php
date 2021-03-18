@@ -34,8 +34,6 @@
     $key = new keys();
     $header = new header();
     $member = new member();
-    $Paginator = new Nette\Utils\Paginator;
-    $ClassMaker = new Nette\PhpGenerator\ClassType('測試');
     $debug = null;$expire_message = null;
 
     // logout system

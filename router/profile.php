@@ -7,14 +7,14 @@
 			if(@$plugins->post("profile_edit")){
 				$Profile = $member->GetProfile($plugins->session("member"),true);
 				$r = $plugins->array_resort($plugins->post(),1);
-				$r1 = $plugins->array_resort($Profile);
-				
-
-
-
-
-				$plugins->pinv($Profile, "Profile");
-				$plugins->pinv([$r,$r1], "Result");
+				$plugins->array_splice_key($Profile,[0,1,5,6],true,false,true);
+				$rr2 = $plugins->array_diffs($Profile,$r,true);
+				$result = $member->UpdateProfile(
+					$plugins->session("member"),
+					[$rr2,$r],
+					["nickname","birthday","sex","theme","phone"]
+				);
+                $plugins->result($result , ["更新成功","更新失敗",2,"/profile"]);
 			}else{
 				$Profile = $member->GetProfile($plugins->session("member"));
 				$header->meta_member($plugins->session("member")['username']." 個人檔案");

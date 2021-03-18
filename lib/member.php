@@ -52,6 +52,24 @@
             }
         }
 
+        public function UpdateProfile(array $member, array $array, array $prefix_name){
+            $a = $member['access_token'];
+            $b = $array[0];
+            $c = $array[1];
+            foreach ($b as $key => $value) {
+                if($value===true){
+                    $k=$prefix_name[$key];
+                    $v=$c[$key];
+                    $result = $this->plugins->squery([
+                        'run',
+                        "UPDATE `profile` SET `$k`='$v' WHERE `access_token` = '$a'"
+                    ]);
+                    if($result===false){echo $result;   }
+                }
+            }
+            return true;
+        }
+
         /**
          * 取得會員個人資料
          *
