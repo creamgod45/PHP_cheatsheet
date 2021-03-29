@@ -23,10 +23,10 @@
             echo '
                 <body>
                     <form method="POST">
-                        <input type="text" name="username" placeholder="username">
-                        <input type="text" name="email" placeholder="email">
-                        <input type="password" name="password" placeholder="password">
-                        <input type="password" name="repassword" placeholder="repassword">
+                        <input type="text" name="username" placeholder="username" requried>
+                        <input type="email" name="email" placeholder="email" requried>
+                        <input type="password" name="password" placeholder="password" requried>
+                        <input type="password" name="repassword" placeholder="repassword" requried>
                         <input type="submit" value="註冊" name="register">
                     </form>
                 </body>

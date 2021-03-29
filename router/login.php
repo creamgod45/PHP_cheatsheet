@@ -12,13 +12,15 @@
             @$plugins->post("login") and 
             $plugins->session('token') == $plugins->post('token') and 
             empty($_POST['website']) and
-            !(isset($_SERVER['HTTP_REFERER']) AND strpos($_SERVER['HTTP_REFERER'], 'http://localhost/') !== 0)
+            !(isset($_SERVER['HTTP_REFERER']) AND 
+                (strpos($_SERVER['HTTP_REFERER'], 'http://localhost/') != 0) OR
+                (strpos($_SERVER['HTTP_REFERER'], 'http://192.168.0.100/') != 0 )
+            )
         ){
-            
-                $r = $auth->Login([$plugins->post('username'), $plugins->post('password')]);
+            $r = $auth->Login([$plugins->post('username'), $plugins->post('password')]);
             if($r === true){
                 $plugins->result($r, ["登入成功","登入失敗",2,"/index"]);
-                if($plugins->post("remeber") == "on"){
+                if(@$plugins->post("remeber") == "on"){
                     FileSystem::write("./temp/".$plugins->session("member")['access_token'], Json::encode([
                         "device" => $plugins->GetDevice(),
                         "ip" => $plugins->GetIP(),
@@ -50,8 +52,8 @@
             echo '
                 <body>
                     <form method="POST">
-                        <input type="text" name="username" placeholder="username">
-                        <input type="password" name="password" placeholder="password">
+                        <input type="text" name="username" placeholder="username" requried>
+                        <input type="password" name="password" placeholder="password"  requried>
                         <input type="checkbox" name="remeber">記住登入狀態
                         <input type="text" id="website" name="website"/>
                         <input type="hidden" name="token" value="'.$plugins->session('token').'">

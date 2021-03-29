@@ -3,7 +3,7 @@
     // Global Config Environments
     session_start();
     date_default_timezone_set("Asia/Taipei");
-    setcookie( "PHPSESSID", $_COOKIE["PHPSESSID"], time()+31*24*60*60); // reset PHPSESSID Config
+    if($_COOKIE["PHPSESSID"]!=null) setcookie( "PHPSESSID", $_COOKIE["PHPSESSID"], time()+31*24*60*60); // reset PHPSESSID Config
     
 
     // include module 
@@ -34,6 +34,7 @@
     $key = new keys();
     $header = new header();
     $member = new member();
+    $table = new table();
     $debug = null;$expire_message = null;
 
     // logout system
@@ -57,6 +58,8 @@
         include "router/profile.php";
     }else if($router(1) === "logout"){
         include "router/logout.php";
+    }else if($router(1) === "table"){
+        include "router/table.php";
     }else{
         include "router/home.php";
     }

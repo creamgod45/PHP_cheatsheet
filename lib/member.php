@@ -93,10 +93,11 @@
          * @param Araay $member
          * @return Array
          */
-        public function GetAllProfile(){
+        public function GetAllProfile(bool $num=false){
             $row = $this->plugins->squery([
                 'list',
-                "SELECT * FROM `profile`"
+                "SELECT * FROM `profile`",
+                $num
             ]);
             if(empty($row)) return ['result'=>'null'];
             return $row;
@@ -108,5 +109,6 @@
                 "SELECT * FROM `member`"
             ]);
             $this->plugins->v($row);
+            return true;
         }
     }
