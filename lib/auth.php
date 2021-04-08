@@ -22,6 +22,38 @@
             return true;
         }
 
+
+        public function SetMember(){}
+        public function EXPIREMember($member){
+            if(empty($member))return false;
+            $access_token = $member["access_token"];
+            $row = $this->plugins->squery([
+                'get',
+                "SELECT `enable` FROM `member` WHERE `access_token` = '$access_token'",
+            ]);
+            if(empty($row)) return ['result'=>'null'];
+            return $row;
+        }
+
+        public function GetMember(array $member, bool $num=false){
+            $access_token = $member["access_token"];
+            $row = $this->plugins->squery([
+                'get',
+                "SELECT `id`, `username`, `email`, `admin`, `enable`, `created_time` FROM `member` WHERE `access_token` = '$access_token'",
+                $num
+            ]);
+            if(empty($row)) return ['result'=>'null'];
+            return $row;
+        }
+        public function GetAllMember(bool $num=false){
+            $row = $this->plugins->squery([
+                'list',
+                "SELECT `id`, `username`, `email`, `admin`, `enable`, `created_time` FROM `member`",
+                $num
+            ]);
+            if(empty($row)) return ['result'=>'null'];
+            return $row;
+        }
         /**
          * 是否為會員
          *

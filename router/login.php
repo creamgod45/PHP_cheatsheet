@@ -19,7 +19,6 @@
         ){
             $r = $auth->Login([$plugins->post('username'), $plugins->post('password')]);
             if($r === true){
-                $plugins->result($r, ["登入成功","登入失敗",2,"/index"]);
                 if(@$plugins->post("remeber") == "on"){
                     FileSystem::write("./temp/".$plugins->session("member")['access_token'], Json::encode([
                         "device" => $plugins->GetDevice(),
@@ -35,6 +34,8 @@
                         "expiretime" => time() + 30*60
                     ], Json::PRETTY | Json::ESCAPE_UNICODE));
                 }
+                $_SESSION["EXPIRE"]=time()+5*60;
+                $plugins->result($r, ["登入成功","登入失敗",2,"/index"]);
             }else{
                 switch($r){
                     case 0:

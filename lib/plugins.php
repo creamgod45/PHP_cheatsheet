@@ -17,7 +17,8 @@
          * @param String $format
          * @return String
          */
-        public function timestamp(String $format = 'Y-m-d H:i:s', $time = null){
+        public function timestamp($time = null,String $format = 'Y-m-d H:i:s'){
+            if(empty($time))$time=time();
             return date($format, $time);
         }
 
@@ -523,8 +524,8 @@
          * @param Int $offset
          * @return void
          */
-        public function array_resort(Array $array, Int $offset=-1){
-            $arr=[];$k=0;
+        public function array_resort(Array $array, Int $offset=-1,Int $k=0){
+            $arr=[];
             foreach ($array as $key => $value) {
                 if($offset == (-1)){
                     $arr[$k]=$value;

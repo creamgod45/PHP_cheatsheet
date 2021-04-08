@@ -1,6 +1,8 @@
 <?php
 
     // Global Config Environments
+    
+    ob_start();
     session_start();
     date_default_timezone_set("Asia/Taipei");
     if($_COOKIE["PHPSESSID"]!=null) setcookie( "PHPSESSID", $_COOKIE["PHPSESSID"], time()+31*24*60*60); // reset PHPSESSID Config
@@ -60,6 +62,10 @@
         include "router/logout.php";
     }else if($router(1) === "table"){
         include "router/table.php";
+    }else if($router(1) === "profilelist"){
+        include "router/profilelist.php";
+    }else if($router(1) === "memberlist"){
+        include "router/memberlist.php";
     }else{
         include "router/home.php";
     }
@@ -72,4 +78,5 @@
     $plugins->pinv($plugins->request(), "_REQUEST");
     $plugins->pinv($plugins->files(), "_FILES");
     $plugins->pinv($expire_message, "expire");
+    ob_end_flush();
 ?>
