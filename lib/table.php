@@ -8,6 +8,7 @@
         use Nette\SmartObject;
 
         private $plugins;
+        private $htmls;
 
         /**
          * Init Module Loader
@@ -15,6 +16,7 @@
          */
         public function __construct() {
             $this->plugins = new plugins();
+            $this->htmls = new htmls();
             return true;
         }
 
@@ -25,7 +27,7 @@
                 $htmlcode.=$element_config["tagname"];
             }
             foreach ($element_config as $key => $value) {
-                if($key!="tagname" AND $value != "") {
+                if($key!="tagname") {
                     $htmlcode .= " ".$key."=\"$value\"";
                 }
             }
@@ -122,6 +124,10 @@
                                             "style"=>"border:solid 1px darkred;background:red;border-radius:8px;font-size:18px;"
                                         ],$value["body"][$j]["config"][1],true)."</td>";
                                     }
+                                }elseif($value["body"][$j]["tagname"]==="form"){
+                                    @$htmlcode.="<td>";
+                                    @$htmlcode.=$this->htmls->html_Builder();
+                                    @$htmlcode.="</td>";
                                 }else{
                                     @$htmlcode.="<td>".$this->htmlelement_builder(
                                         $value["body"][$j],

@@ -1,7 +1,7 @@
 <?php
 
     // Global Config Environments
-    
+    include 'autoreload.php';  // reset class autoload bug :: not rebuild class
     ob_start();
     session_start();
     date_default_timezone_set("Asia/Taipei");
@@ -31,12 +31,14 @@
     // SETUP VARs
     Debugger::enable();
     $plugins = new plugins();
+    $pay = new pay();
     $auth = new auth();
     $lang = new lang();
     $key = new keys();
     $header = new header();
     $member = new member();
     $table = new table();
+    $html = new htmls();
     $debug = null;$expire_message = null;
 
     // logout system
@@ -54,18 +56,26 @@
     // ROUTER
     if($router(1) === "login"){
         include "router/login.php";
-    }else if($router(1) === "register"){
+    }elseif($router(1) === "register"){
         include "router/regsiter.php";
-    }else if($router(1) === "profile"){        
+    }elseif($router(1) === "profile"){        
         include "router/profile.php";
-    }else if($router(1) === "logout"){
+    }elseif($router(1) === "logout"){
         include "router/logout.php";
-    }else if($router(1) === "table"){
+    }elseif($router(1) === "table"){
         include "router/table.php";
-    }else if($router(1) === "profilelist"){
+    }elseif($router(1) === "profilelist"){
         include "router/profilelist.php";
-    }else if($router(1) === "memberlist"){
+    }elseif($router(1) === "memberlist"){
         include "router/memberlist.php";
+    }elseif($router(1) === "pay"){
+        if(@$router(2) === "list"){
+            include "router/paylist.php";
+        }elseif(@$router(2) === "manage"){
+            include "router/paymanage.php";
+        }else{
+            include "router/pay.php";
+        }
     }else{
         include "router/home.php";
     }

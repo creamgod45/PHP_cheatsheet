@@ -34,7 +34,7 @@
                         "expiretime" => time() + 30*60
                     ], Json::PRETTY | Json::ESCAPE_UNICODE));
                 }
-                $_SESSION["EXPIRE"]=time()+5*60;
+                $_SESSION["EXPIRE"]=time()+1*60;
                 $plugins->result($r, ["登入成功","登入失敗",2,"/index"]);
             }else{
                 switch($r){
