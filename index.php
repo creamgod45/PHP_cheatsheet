@@ -72,7 +72,7 @@
         if(@$router(2) === "list"){
             include "router/paylist.php";
         }elseif(@$router(2) === "manage"){
-            include "router/paymanage.php";
+            include "router/paymanage.php"; 
         }else{
             include "router/pay.php";
         }

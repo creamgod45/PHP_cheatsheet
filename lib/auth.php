@@ -6,8 +6,6 @@
 
     class auth extends Exception_try {
 
-        use Nette\SmartObject;
-
         private $plugins;
 
         private $keys;

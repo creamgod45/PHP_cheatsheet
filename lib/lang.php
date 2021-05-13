@@ -5,8 +5,6 @@
 
     class lang extends Exception_try {
 
-        use Nette\SmartObject;
-
         private $plugins;
 
         /**

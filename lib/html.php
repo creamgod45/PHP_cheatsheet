@@ -7,11 +7,6 @@ require_once "html.php";
 
 class htmls {
 
-    /**
-     * 
-     */
-    use Nette\SmartObject;
-
     private $plugins;
 
     /**
@@ -25,7 +20,7 @@ class htmls {
 
     public function html_Exception(){}
     public function html_ViewDispatcher(String $type,Mixed $data){
-        
+
     }
     public function html_Builder(Array $array=[]){
         // 初始化
@@ -46,6 +41,7 @@ class htmls {
         }
         // 一列式標籤
         if($close===false) {
+            // 標籤結尾
             $code.="/>";
         }else{
             $code.=">";
@@ -53,13 +49,18 @@ class htmls {
             if(!empty($body)){
                 if(is_array($body)){ 
                     // 子陣列處理
-                    for ($i=0; $i < count($body); $i++) { 
-                        // 循環結構
+                    if(@$body["type"]!=""){
+                        // 調度員 (dispatcher) 處理
+                        html_ViewDispatcher($body["type"], $body[0]);
                         $code.=$this->html_Builder($body[$i]);
+                    }else{
+                        // 循環結構
+                        for ($i=0; $i < count($body); $i++) { 
+                            $code.=$this->html_Builder($body[$i]);
+                        }
                     }
                 }elseif(is_string($body)){
-                    
-                    // 調度員 (dispatcher) 處理
+                    // 內容處理
                     if($close==true){$code.=$body;}
                 }
             }

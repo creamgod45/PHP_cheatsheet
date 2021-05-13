@@ -6,6 +6,8 @@
         "nette/robot-loader": "^3.3",
         "nette/php-generator": "^3.5",
         "tracy/tracy": "^2.8",
-        "sonata-project/google-authenticator": "^2.3"
+        "sonata-project/google-authenticator": "^2.3",
+        "shuchkin/simplexlsx": "^0.8.22",
+        "shuchkin/simplexlsxgen": "^0.9.25"
     }
 }

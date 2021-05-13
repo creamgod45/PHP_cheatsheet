@@ -5,8 +5,6 @@
 
     class header extends Exception_try {
 
-        use Nette\SmartObject;
-
         private $plugins;
         
         public $config;

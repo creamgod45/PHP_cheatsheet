@@ -1,15 +1,12 @@
 <?php
 
     require_once "exception.php";
-    require 'vendor/autoload.php';
     
     /**
      * Plugins module
      * @package lib
      */
     class plugins extends Exception_try {
-        
-        use Nette\SmartObject;
 
         /**
          * 取得有格式的時間字串

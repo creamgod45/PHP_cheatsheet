@@ -4,8 +4,6 @@
 
     class keys extends Exception_try {
 
-        use Nette\SmartObject;
-
         /**
          * 會員唯一辨識碼
          *

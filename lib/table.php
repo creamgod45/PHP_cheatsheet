@@ -5,8 +5,6 @@
 
     class table extends Exception_try {
 
-        use Nette\SmartObject;
-
         private $plugins;
         private $htmls;
 
