@@ -10,6 +10,8 @@
 
         private $keys;
 
+        private $member;
+
         /**
          * Init Module Loader
          * @return Boolean
@@ -17,6 +19,7 @@
         public function __construct() {
             $this->plugins = new plugins();
             $this->keys = new keys();
+            $this->member = new member();
             return true;
         }
 
@@ -119,6 +122,7 @@
                         "INSERT INTO `member`(`access_token`, `username`, `password`, `email`, `admin`, `enable`, `created_time`) 
                         VALUES ('$key','$array[0]','$passwd','$array[3]','$array[4]','$array[5]','$time')"
                     ]);
+                    $this->member->SetProfile(["access_token"=>$key],[$array[0],"","","","/user/null.png","/user/".$key."_banner.jpg"]);
                     return true;
                 }
                 return 1;

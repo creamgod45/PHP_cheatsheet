@@ -16,30 +16,50 @@
 </form>
 
 <hr>
+<?php // 自幹開頭 ?>
 
-<form action="" method="POST">
-    <label>支付碼</label>
-    <input type="text" name="pay.token" value="" />
-    <label>名稱</label>
-    <input type="text" name="pay.name" />
-    <label>說明</label>
-    <textarea name="pay.des"></textarea>
-    <label>金額</label>
-    <input type="number" name="pay.amount" />
-    <label>相關人</label>
-    <textarea name="pay.staff"></textarea>
-    <label>狀態</label>
-    <div name="pay.status"></div>
-    <label>文件</label>
-    <div id="pay.certified"></div>
-    <input type="submit" name="pay.create" value="更新資訊" />
-</form>
-<script src="/router/getProfile.js.php"></script>
-<hr>
-<!-- <details>
-    <summary>test</summary>
-    A keyboard.
-</details> -->
+<script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+.pf_card_element{
+    display: none;
+    z-index:100;
+}
+.pf_card_border{
+    border-radius:8px;
+    border:solid 2px black;
+    background:white;
+    padding:8px;
+    height:100%;
+}
+.pf_card_border .pf_card_image img{
+    float:left;
+    width:72px;
+    height:72px;
+    border-radius:50%;
+}
+.pf_card_border .pf_card_title {
+    display:block;
+    font-size: 24px;
+    text-align:left;
+    margin:16px;
+}
+.pf_card_border .pf_card_title span{
+    margin:16px;
+    padding:16px;
+}
+.pf_card_border .pf_card_content{
+    text-align:left;
+    margin-top:48px;
+}
+.pf_card_border .pf_card_content li{
+    overflow : hidden;
+    text-overflow : ellipsis;
+    white-space : nowrap;
+    width : 280px;
+}
+</style>
+
+
 <?php
 	$Pay = $pay->GetAllPay(true);
     $r=[];
@@ -51,6 +71,98 @@
         $result[$k]=[];
         foreach ($Pay[$i] as $key => $value) {
             //if($value[""])
+            $or_value=$value;
+            if($key == "staff" or $key == "status" or $key == "certified") { 
+                $value = json_decode($value, true);
+                switch ($key) {
+                    case 'staff':
+                        $content = [];
+                        foreach ($value as $kk => $vv) {
+                            // style
+                            array_push($r[$k], [
+                                "tagname"=>"style",
+                                "config"=>[
+                                    "config.close"=>true
+                                ],
+                                "body"=>"
+                                .pf_card".$Pay[$i]['pay_token'].$key.$kk."{
+                                    position: relative;
+                                    margin:0px 8px;
+                                }
+                                .pf_card".$Pay[$i]['pay_token'].$key.$kk.":hover .pf_card_element{
+                                    display :block;
+                                    position: absolute;
+                                    top:100%;
+                                    left:0;
+                                }
+                                "
+                            ]);
+                            @$name = $plugins->squery([
+                                "get",
+                                "SELECT `nickname` FROM `profile` WHERE `access_token` = '$vv'"
+                            ])[0];
+                            $name = $plugins->default($name, "<b style='color:red;'>無效帳號</b>");
+                            array_push($content,
+                                [
+                                    "config"=>[
+                                        "1"=>"1",
+                                        "config.close"=>true
+                                    ],
+                                    "body"=>[
+                                        "type"=>"pay.staff",
+                                        "data"=>[$Pay[$i],$key,$vv,$kk]
+                                    ]
+                                ],
+                                [
+                                    "tagname"=>"div",
+                                    "config"=>[
+                                        "class"=>"pf_card".$Pay[$i]['pay_token'].$key.$kk,
+                                        "config.close"=>true
+                                    ],
+                                    "body"=>"$name"
+                                ]
+                            );
+                            
+                        }
+                        array_push($r[$k], [
+                            "tagname"=>"th",
+                            "config"=>[
+                                "config.close"=>true
+                            ],
+                            "body"=>[
+                                [
+                                    "tagname"=>"div",
+                                    "config"=>[
+                                        "style"=>"display:flex;height:100%;",
+                                        "config.close"=>true
+                                    ],
+                                    "body"=>$content
+                                ]
+                            ]
+                        ]); 
+                    break;
+                    default:
+                        array_push($r[$k], [
+                            "tagname"=>"th",
+                            "config"=>[
+                                "width"=>"5%",
+                                "config.close"=>true
+                            ],
+                            "body"=>[
+                                [
+                                    "tagname"=>"div",
+                                    "config"=>[
+                                        "class"=>"pf_card".$Pay[$i]['pay_token'].$key,
+                                        "config.close"=>true
+                                    ],
+                                    "body"=>"未格式化[(JSON)".$or_value."]"
+                                ]
+                            ]
+                        ]);    
+                    break;
+                }
+                continue;
+            }
             array_push($r[$k], [
                 "tagname"=>"th",
                 "config"=>[
@@ -59,6 +171,7 @@
                 "body"=>$value
             ]);
         }
+        // form 表單產生
         array_push($r[$k], [
             "tagname"=>"th",
             "config"=>[
@@ -91,6 +204,7 @@
                                     "config"=>[
                                         "type"=>"text",
                                         "name"=>"pay.name",
+                                        "value"=>$Pay[$k+1]['name'],
                                         "config.close"=>false
                                     ],
                                     "body"=>""
@@ -116,7 +230,7 @@
                                         "name"=>"pay.des",
                                         "config.close"=>true
                                     ],
-                                    "body"=>""
+                                    "body"=>$Pay[$k+1]['description']
                                 ]
                             ]
                         ],
@@ -136,6 +250,7 @@
                                 [
                                     "tagname"=>"input",
                                     "config"=>[
+                                        "value"=>$Pay[$k+1]['amount'],
                                         "type"=>"number",
                                         "name"=>"pay.amount",
                                         "config.close"=>false   
@@ -160,6 +275,7 @@
                                 [
                                     "tagname"=>"input",
                                     "config"=>[
+                                        "value"=>htmlspecialchars($Pay[$k+1]['staff']),
                                         "type"=>"text",
                                         "name"=>"pay.staff",
                                         "config.close"=>false
@@ -184,6 +300,7 @@
                                 [
                                     "tagname"=>"input",
                                     "config"=>[
+                                        "value"=>htmlspecialchars($Pay[$k+1]['status']),
                                         "type"=>"text",
                                         "name"=>"pay.status",
                                         "config.close"=>false 
@@ -208,6 +325,7 @@
                                 [
                                     "tagname"=>"input",
                                     "config"=>[
+                                        "value"=>htmlspecialchars($Pay[$k+1]['certified']),
                                         "type"=>"text",
                                         "name"=>"pay.certified",
                                         "config.close"=>false  

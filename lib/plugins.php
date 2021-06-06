@@ -582,7 +582,7 @@
                 }
                 if($notfoundmsg===true) echo $key." 未找相關指標名稱。<br>";
             }
-            if($e>0) return false;
+            //if($e>0) return false;
             if($result===true){
                 return $arr;
             }
@@ -656,6 +656,7 @@
 
         public function default($data,$default=null){
             if(@empty($data) or $data==null) return $default;
+            return $data;
         }
 
     }

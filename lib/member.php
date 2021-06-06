@@ -38,10 +38,12 @@
             $c = $array[1];
             $d = $array[2];
             $e = $array[3];
+            $f = $array[4];
+            $g = $array[5];
             $result = $this->plugins->squery([
                 'run',
                 "INSERT INTO `profile`(`access_token`, `nickname`, `birthday`, `sex`, `image_url`, `banner_url`, `theme`, `phone`) 
-                VALUES ('$a','$b','$c','$d','null','null','default','$e')"
+                VALUES ('$a','$b','$c','$d','$f','$g','default','$e')"
             ]);
             if($result){
                 return true;
@@ -57,12 +59,12 @@
             foreach ($b as $key => $value) {
                 if($value===true){
                     $k=$prefix_name[$key];
-                    $v=$c[$key];
+                    $v=$c[$k];
                     $result = $this->plugins->squery([
                         'run',
                         "UPDATE `profile` SET `$k`='$v' WHERE `access_token` = '$a'"
                     ]);
-                    if($result===false){echo $result;   }
+                    if($result===false){echo $result;}
                 }
             }
             return true;
