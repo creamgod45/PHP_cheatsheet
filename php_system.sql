@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2021-03-29 19:51:11
+-- 產生時間： 2021-06-06 21:33:11
 -- 伺服器版本： 10.4.17-MariaDB
 -- PHP 版本： 7.4.14
 
@@ -42,6 +42,25 @@ CREATE TABLE `member` (
 -- --------------------------------------------------------
 
 --
+-- 資料表結構 `pay`
+--
+
+CREATE TABLE `pay` (
+  `id` int(11) NOT NULL COMMENT 'ID',
+  `pay_token` varchar(255) COLLATE utf8_bin NOT NULL COMMENT '支付碼',
+  `name` text COLLATE utf8_bin NOT NULL COMMENT '名稱',
+  `description` text COLLATE utf8_bin NOT NULL COMMENT '說明',
+  `amount` int(11) NOT NULL COMMENT '金額',
+  `staff` text COLLATE utf8_bin NOT NULL COMMENT '相關人',
+  `status` varchar(255) COLLATE utf8_bin NOT NULL COMMENT '狀態',
+  `certified` text COLLATE utf8_bin NOT NULL COMMENT '證明',
+  `created_time` varchar(255) COLLATE utf8_bin NOT NULL COMMENT '建立時間',
+  `updated_time` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT '更新時間'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- --------------------------------------------------------
+
+--
 -- 資料表結構 `profile`
 --
 
@@ -64,6 +83,12 @@ ALTER TABLE `member`
   ADD PRIMARY KEY (`id`);
 
 --
+-- 資料表索引 `pay`
+--
+ALTER TABLE `pay`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- 資料表索引 `profile`
 --
 ALTER TABLE `profile`
@@ -77,23 +102,19 @@ ALTER TABLE `profile`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `member`
 --
 ALTER TABLE `member`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `pay`
+--
+ALTER TABLE `pay`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID', AUTO_INCREMENT=3;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `profile`
 --
 ALTER TABLE `profile`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- 已傾印資料表的限制式
---
-
---
--- 資料表的限制式 `profile`
---
-ALTER TABLE `profile`
-  ADD CONSTRAINT `profile_ibfk_1` FOREIGN KEY (`id`) REFERENCES `member` (`id`);
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
