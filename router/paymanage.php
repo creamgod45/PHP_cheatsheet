@@ -105,7 +105,6 @@
                             array_push($content,
                                 [
                                     "config"=>[
-                                        "1"=>"1",
                                         "config.close"=>true
                                     ],
                                     "body"=>[
@@ -124,9 +123,11 @@
                             );
                             
                         }
+                        $content = $plugins->default($content, "<div style='padding:0px 8px;'>無相關人</div>");
                         array_push($r[$k], [
                             "tagname"=>"th",
                             "config"=>[
+                                "id"=>"result_card",
                                 "config.close"=>true
                             ],
                             "body"=>[

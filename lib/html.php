@@ -43,8 +43,7 @@ class htmls {
                         dataType: \"json\",
                         success: function (response) {
                             datas = response;
-                            console.log(datas);
-                            $(\".pf_card".$Pay['pay_token'].$key.$kk."\").append('<div class=\"pf_card_element\"><div class=\"pf_card_border\"><div class=\"pf_card_image\"><img src=\"$img\"></div><div class=\"pf_card_title\"><span>'+datas.nickname+'</span></div><div class=\"pf_card_content\"><ul><li>身分號:'+datas.access_token+'</li><li>生日:'+datas.birthday+'</li><li>電話:'+datas.phone+'</li><li>性別:'+datas.sex+'</li></ul></div></div></div>');                            }
+                            $(\".pf_card".$Pay['pay_token'].$key.$kk."\").append('<div class=\"pf_card_element\"><div class=\"pf_card_border\"><div class=\"pf_card_image\"><img src=\"$img\"></div><div class=\"pf_card_title\"><span>'+datas.nickname+'</span></div><div class=\"pf_card_content\"><ul><li title=\"'+datas.access_token+'\">辨識碼:'+datas.access_token+'</li><li>生日:'+datas.birthday+'</li><li>電話:'+datas.phone+'</li><li>性別:'+datas.sex+'</li></ul></div></div></div>');                            }
                     });
                 });";
                 break;
